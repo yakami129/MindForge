@@ -1,5 +1,5 @@
 import Nano from "@budibase/nano"
-import { AllDocsResponse, AnyDocument, Document } from "../index"
+import { AllDocsResponse, AnyDocument, Document } from "../"
 import { Writable } from "stream"
 import PouchDB from "pouchdb"
 

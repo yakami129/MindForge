@@ -1,5 +1,5 @@
 import { testEnv } from "../../../tests/extra"
-import * as context from "../index"
+import * as context from "../"
 import { DEFAULT_TENANT_ID } from "../../constants"
 
 describe("context", () => {

@@ -1,6 +1,6 @@
 {
   "name": "@budibase/string-templates",
-  "version": "2.5.5-alpha.0",
+  "version": "2.5.6-alpha.1",
   "description": "Handlebars wrapper for Budibase templating.",
   "main": "src/index.cjs",
   "module": "dist/bundle.mjs",
@@ -22,7 +22,7 @@
     "build": "tsc && rollup -c",
     "dev:builder": "tsc && rollup -cw",
     "test": "jest",
-    "manifest": "node scripts/gen-collection-info.js"
+    "manifest": "node ./scripts/gen-collection-info.js"
   },
   "dependencies": {
     "@budibase/handlebars-helpers": "^0.11.8",

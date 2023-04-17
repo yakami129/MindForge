@@ -13,7 +13,7 @@ import {
   UpdateOptions,
   OperationOptions,
   MongoClientOptions,
-} from "src/integrations/mongodb"
+} from "mongodb"
 import environment from "../environment"
 
 interface MongoDBConfig {

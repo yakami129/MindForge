@@ -1,4 +1,4 @@
-import { generator, uuid } from "./index"
+import { generator, uuid } from "."
 import { generateGlobalUserID } from "../../../../src/docIds"
 import {
   Account,

@@ -6,7 +6,7 @@ import {
   ViewName,
 } from "../constants"
 import { getGlobalDB } from "../context"
-import { doWithDB } from "./index"
+import { doWithDB } from "./"
 import { Database, DatabaseQueryOpts } from "@budibase/types"
 import env from "../environment"
 

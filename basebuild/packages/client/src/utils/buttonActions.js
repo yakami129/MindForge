@@ -12,7 +12,7 @@ import {
   rowSelectionStore,
   sidePanelStore,
 } from "stores"
-import { API } from "basebuild/packages/client/src/utils/api"
+import { API } from "api"
 import { ActionTypes } from "constants"
 import { enrichDataBindings } from "./enrichDataBinding"
 import { Helpers } from "@budibase/bbui"

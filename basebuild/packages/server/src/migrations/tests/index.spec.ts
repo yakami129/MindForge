@@ -7,7 +7,7 @@ import {
 } from "@budibase/backend-core"
 import TestConfig from "../../tests/utilities/TestConfiguration"
 import * as structures from "../../tests/utilities/structures"
-import { MIGRATIONS } from "../index"
+import { MIGRATIONS } from "../"
 import * as helpers from "./helpers"
 
 import tk from "timekeeper"

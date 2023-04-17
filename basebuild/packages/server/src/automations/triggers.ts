@@ -1,4 +1,4 @@
-import emitter from "../events"
+import emitter from "../events/index"
 import { getAutomationParams } from "../db/utils"
 import { coerce } from "../utilities/rowProcessor"
 import { definitions } from "./triggerInfo"

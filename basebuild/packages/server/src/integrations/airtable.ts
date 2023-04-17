@@ -5,7 +5,7 @@ import {
   IntegrationBase,
 } from "@budibase/types"
 
-const Airtable = require("src/integrations/airtable")
+const Airtable = require("airtable")
 
 interface AirtableConfig {
   apiKey: string

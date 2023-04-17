@@ -2,10 +2,10 @@
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "composite": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@budibase/types": ["../types/src"]
     }
   },
-  "references": [{ "path": "../types"}]
+  "references": [{ "path": "../types" }]
 }

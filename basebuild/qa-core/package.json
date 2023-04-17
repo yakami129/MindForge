@@ -16,7 +16,7 @@
     "test:notify": "node scripts/testResultsWebhook",
     "test:smoke": "yarn run test --testPathIgnorePatterns=\\\"\\/dataSources\\/\\\"",
     "test:ci": "start-server-and-test dev:built http://localhost:4001/health test:smoke",
-    "dev:built": "cd ../.. && yarn dev:built"
+    "dev:built": "cd ../ && yarn dev:built"
   },
   "devDependencies": {
     "@budibase/types": "^2.3.17",

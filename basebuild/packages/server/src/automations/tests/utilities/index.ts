@@ -1,7 +1,7 @@
 import TestConfig from "../../../tests/utilities/TestConfiguration"
 import { context } from "@budibase/backend-core"
 import { ACTION_DEFINITIONS, getAction } from "../../actions"
-import emitter from "../../../events"
+import emitter from "../../../events/index"
 import env from "../../../environment"
 
 let config: any

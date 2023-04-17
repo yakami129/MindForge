@@ -1,4 +1,4 @@
-import { API } from "basebuild/packages/client/src/utils/api"
+import { API } from "api"
 import TableFetch from "@budibase/frontend-core/src/fetch/TableFetch.js"
 import ViewFetch from "@budibase/frontend-core/src/fetch/ViewFetch.js"
 import QueryFetch from "@budibase/frontend-core/src/fetch/QueryFetch.js"

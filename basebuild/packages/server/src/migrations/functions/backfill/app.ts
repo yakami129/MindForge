@@ -9,7 +9,7 @@ import * as global from "./global"
 import { App, AppBackfillSucceededEvent, Event } from "@budibase/types"
 import { db as dbUtils, events } from "@budibase/backend-core"
 import env from "../../../environment"
-import { DEFAULT_TIMESTAMP } from "./index"
+import { DEFAULT_TIMESTAMP } from "."
 
 const failGraceful = env.SELF_HOSTED && !env.isDev()
 

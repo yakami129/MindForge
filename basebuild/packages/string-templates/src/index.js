@@ -1,5 +1,5 @@
 const handlebars = require("handlebars")
-const { registerAll, registerMinimum } = require("./helpers")
+const { registerAll, registerMinimum } = require("./helpers/index")
 const processors = require("./processors")
 const { atob, btoa } = require("./utilities")
 const manifest = require("../manifest.json")

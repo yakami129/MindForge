@@ -1,6 +1,6 @@
 import env from "../../../environment"
 import { db as dbCore, context } from "@budibase/backend-core"
-import sdk from "../../index"
+import sdk from "../../"
 
 export async function syncApp(
   appId: string,

@@ -1,5 +1,5 @@
 import { makePropSafe as safe } from "@budibase/string-templates"
-import { API } from "../api"
+import { API } from "../api/index.js"
 
 // Map of data types to component types for search fields inside blocks
 const schemaComponentMap = {

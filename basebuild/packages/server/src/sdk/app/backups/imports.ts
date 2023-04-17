@@ -7,7 +7,7 @@ import { downloadTemplate } from "../../../utilities/fileSystem"
 import { ObjectStoreBuckets } from "../../../constants"
 import { join } from "path"
 import fs from "fs"
-import sdk from "../../index"
+import sdk from "../../"
 import {
   Automation,
   AutomationTriggerStepId,

@@ -17,7 +17,7 @@ import {
   User,
 } from "@budibase/types"
 import env from "../../../environment"
-import { DEFAULT_TIMESTAMP } from "./index"
+import { DEFAULT_TIMESTAMP } from "."
 
 const failGraceful = env.SELF_HOSTED && !env.isDev()
 

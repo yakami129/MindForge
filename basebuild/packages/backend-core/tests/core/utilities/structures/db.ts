@@ -1,4 +1,4 @@
-import { structures } from "../index"
+import { structures } from ".."
 import { newid } from "../../../../src/docIds/newid"
 
 export function id() {

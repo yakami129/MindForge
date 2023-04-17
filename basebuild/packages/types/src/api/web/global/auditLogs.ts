@@ -3,8 +3,8 @@ import {
   PaginationResponse,
   PaginationRequest,
   BasicPaginationRequest,
-} from "../index"
-import { User, App } from "../../../index"
+} from "../"
+import { User, App } from "../../../"
 
 export interface AuditLogSearchParams {
   userIds?: string[]

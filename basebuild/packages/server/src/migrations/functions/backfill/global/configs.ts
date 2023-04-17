@@ -12,7 +12,7 @@ import {
   isSettingsConfig,
   ConfigType,
 } from "@budibase/types"
-import env from "../../../../environment"
+import env from "./../../../../environment"
 
 export const getConfigParams = () => {
   return {

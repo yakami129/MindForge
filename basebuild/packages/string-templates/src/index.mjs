@@ -1,6 +1,6 @@
 import vm from "vm"
 import templates from "./index.js"
-import { setJSRunner } from "./helpers/javascript.js"
+import { setJSRunner } from "./helpers/javascript"
 
 /**
  * ES6 entrypoint for rollup

@@ -1,4 +1,4 @@
-import PouchDB from "src/db/couch/pouchDB"
+import PouchDB from "pouchdb"
 import env from "../../environment"
 import { PouchOptions } from "@budibase/types"
 import { getCouchInfo } from "./connections"

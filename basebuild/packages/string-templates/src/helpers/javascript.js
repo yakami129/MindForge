@@ -1,6 +1,6 @@
 const { atob } = require("../utilities")
 const { cloneDeep } = require("lodash/fp")
-const { LITERAL_MARKER } = require("./constants")
+const { LITERAL_MARKER } = require("../helpers/constants")
 const { getHelperList } = require("./list")
 
 // The method of executing JS scripts depends on the bundle being built.

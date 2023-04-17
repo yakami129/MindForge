@@ -1,4 +1,4 @@
-const mongo = require("src/integrations/mongodb")
+const mongo = require("mongodb")
 import { default as MongoDBIntegration } from "../mongodb"
 jest.mock("mongodb")
 

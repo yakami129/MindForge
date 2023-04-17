@@ -1,4 +1,4 @@
-import { User, Document } from "../index"
+import { User, Document } from "../"
 
 export type AppMetadataErrors = { [key: string]: string[] }
 

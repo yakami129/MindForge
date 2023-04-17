@@ -9,7 +9,7 @@ import {
 import environment from "../environment"
 import * as platform from "../platform"
 import * as context from "../context"
-import { DEFINITIONS } from "./index"
+import { DEFINITIONS } from "."
 import {
   Migration,
   MigrationOptions,

@@ -1,4 +1,4 @@
-import { generator } from "./index"
+import { generator } from "."
 import { Plugin, PluginSource, PluginType } from "@budibase/types"
 
 export function plugin(): Plugin {

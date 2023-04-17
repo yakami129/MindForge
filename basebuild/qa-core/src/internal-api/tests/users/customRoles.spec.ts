@@ -1,7 +1,7 @@
 import TestConfiguration from "../../config/TestConfiguration"
 import { App, User } from "@budibase/types"
 import { db } from "@budibase/backend-core"
-import * as fixtures from "../../fixtures"
+import * as fixtures from "./../../fixtures"
 
 describe.skip("Internal API - App Specific Roles & Permissions", () => {
   const config = new TestConfiguration()

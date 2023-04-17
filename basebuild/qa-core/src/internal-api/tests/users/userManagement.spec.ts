@@ -1,6 +1,6 @@
 import TestConfiguration from "../../config/TestConfiguration"
 import { User } from "@budibase/types"
-import * as fixtures from "../../fixtures"
+import * as fixtures from "./../../fixtures"
 
 describe("Internal API - User Management & Permissions", () => {
   const config = new TestConfiguration()

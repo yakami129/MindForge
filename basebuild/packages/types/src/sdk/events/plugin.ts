@@ -1,5 +1,5 @@
 import { BaseEvent } from "./event"
-import { PluginSource, PluginType } from "../../index"
+import { PluginSource, PluginType } from "../../"
 
 export interface PluginInitEvent extends BaseEvent {
   type: PluginType

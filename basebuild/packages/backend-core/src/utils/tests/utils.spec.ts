@@ -1,9 +1,9 @@
 import { structures } from "../../../tests"
 import { DBTestConfiguration } from "../../../tests/extra"
-import * as utils from "../index"
+import * as utils from "../../utils"
 import * as db from "../../db"
 import { Header } from "../../constants"
-import { newid } from "../index"
+import { newid } from "../../utils"
 import env from "../../environment"
 
 describe("utils", () => {

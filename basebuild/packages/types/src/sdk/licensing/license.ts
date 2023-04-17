@@ -1,4 +1,4 @@
-import { AccountPlan, Quotas, Feature, Billing } from "./index"
+import { AccountPlan, Quotas, Feature, Billing } from "."
 
 export interface License {
   features: Feature[]

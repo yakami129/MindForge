@@ -1,4 +1,4 @@
-import CodeMirror from "basebuild/packages/builder/src/components/integration/codemirror"
+import CodeMirror from "codemirror"
 import "codemirror/lib/codemirror.css"
 
 // Modes

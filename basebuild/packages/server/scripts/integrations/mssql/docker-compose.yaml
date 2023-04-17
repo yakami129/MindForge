@@ -6,7 +6,7 @@ services:
   mssql:
     image: bb/mssql
     build:
-      context: ""
+      context: .
       dockerfile: data/Dockerfile
     ports:
       - "1433:1433"

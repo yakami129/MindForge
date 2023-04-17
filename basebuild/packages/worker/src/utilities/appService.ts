@@ -5,7 +5,7 @@ import {
   logging,
   env as coreEnv,
 } from "@budibase/backend-core"
-import { checkSlashesInUrl } from "./index"
+import { checkSlashesInUrl } from "../utilities"
 import env from "../environment"
 import { SyncUserRequest, User } from "@budibase/types"
 

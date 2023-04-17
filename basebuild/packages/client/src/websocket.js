@@ -2,7 +2,7 @@ import {
   builderStore,
   environmentStore,
   notificationStore,
-} from "./stores"
+} from "./stores/index.js"
 import { get } from "svelte/store"
 import { io } from "socket.io-client"
 

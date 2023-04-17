@@ -1,4 +1,4 @@
-import { PlanType } from "./index"
+import { PlanType } from "."
 
 export enum QuotaUsageType {
   STATIC = "static",

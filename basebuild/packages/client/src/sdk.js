@@ -1,4 +1,4 @@
-import { API } from "basebuild/packages/client/src/api"
+import { API } from "api"
 import {
   authStore,
   notificationStore,
@@ -12,11 +12,11 @@ import {
   environmentStore,
   sidePanelStore,
   dndIsDragging,
-} from "basebuild/packages/client/src/stores"
-import { styleable } from "basebuild/packages/client/src/utils/styleable"
-import { linkable } from "basebuild/packages/client/src/utils/linkable"
-import { getAction } from "basebuild/packages/client/src/utils/getAction"
-import Provider from "basebuild/packages/client/src/components/context/Provider.svelte"
+} from "stores"
+import { styleable } from "utils/styleable"
+import { linkable } from "utils/linkable"
+import { getAction } from "utils/getAction"
+import Provider from "components/context/Provider.svelte"
 import { ActionTypes } from "./constants"
 import { fetchDatasourceSchema } from "./utils/schema.js"
 import { getAPIKey } from "./utils/api.js"

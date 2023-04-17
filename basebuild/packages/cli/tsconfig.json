@@ -4,11 +4,11 @@
     "composite": true,
     "declaration": true,
     "sourceMap": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@budibase/types": ["../types/src"],
       "@budibase/backend-core": ["../backend-core/src"],
-      "@budibase/backend-core/*": ["../backend-core/*"]
+      "@budibase/backend-core/*": ["../backend-core/*"],
     }
   },
   "ts-node": {
@@ -16,8 +16,8 @@
     "swc": true
   },
   "references": [
-    { "path": "../types"},
-    { "path": "../backend-core"}
+    { "path": "../types" },
+    { "path": "../backend-core" },
   ],
   "include": [
     "src/**/*",

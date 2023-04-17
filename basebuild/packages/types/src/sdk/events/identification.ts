@@ -1,4 +1,4 @@
-import { Hosting } from "../index"
+import { Hosting } from ".."
 
 // GROUPS
 

@@ -2,7 +2,7 @@ import {
   TenantFeatureFlag,
   buildFeatureFlags,
   getTenantFeatureFlags,
-} from "../index"
+} from "../"
 import env from "../../environment"
 
 const { ONBOARDING_TOUR, LICENSING, USER_GROUPS } = TenantFeatureFlag
