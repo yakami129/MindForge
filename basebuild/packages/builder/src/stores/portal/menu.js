@@ -21,6 +21,10 @@ export const menu = derived([admin, auth], ([$admin, $auth]) => {
   // Pages that all devs and admins can access
   let menu = [
     {
+      title: "GPT",
+      href: "/builder/portal/gpt",
+    },
+    {
       title: "Apps",
       href: "/builder/portal/apps",
     },
