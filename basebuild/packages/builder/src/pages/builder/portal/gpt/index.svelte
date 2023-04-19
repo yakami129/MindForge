@@ -206,7 +206,6 @@
         } catch (error) {
             notifications.error("Error getting init info")
         }
-
     })
 
     let messageInput = "";
@@ -215,14 +214,25 @@
     function sendMessage() {
         if (messageInput.trim()) {
             messages = [...messages, {text: messageInput.trim(), timestamp: new Date(), isUser: true}];
+            let inputText = messageInput;
             messageInput = "";
-
-            // 示例：添加一个其他人发送的回复消息
-            setTimeout(() => {
-                messages = [...messages, {text: 'This is a reply.', timestamp: new Date(), isUser: false}];
-            }, 1000);
+            chat(inputText)
+                .then(response => {
+                    messages = [...messages, {text: response, timestamp: new Date(), isUser: false}];
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
     }
+
+    function chat(prompt) {
+        return fetch(`http://localhost:8000/app/?prompt=${prompt}`)
+            .then(res => res.json())
+            .then(data => data.response);
+    }
+
+    chat('hello')
 
     function handleKeyDown(e) {
         if (e.key === "Enter") {
@@ -257,6 +267,7 @@
                     <Layout noPadding gap="XS">
                         <Heading size="L">MindForge</Heading>
                         <Body size="M">
+                            MindForge是一种智能技术，它可以帮助人们更快地构建自己的业务系统。它通过融合机器学习、自然语言处理和智能分析，提供了一种更高效的需求分析方式，可以更好的理解人们的业务需求。MindForge的核心理念是帮助人们更快地构建业务系统，更快地实现他们的目标。
                         </Body>
                     </Layout>
                 </div>
@@ -281,7 +292,7 @@
                             <input
                                     type="text"
                                     bind:value="{messageInput}"
-                                    placeholder="请简短描述一下你的需求"
+                                    placeholder="请简短描述一下你的需求~"
                                     on:keydown="{handleKeyDown}"
                             />
                             <button on:click="{sendMessage}">Send</button>
@@ -420,6 +431,10 @@
         justify-content: space-between;
         height: 60vh;
         padding: 1rem;
+        border: 1px solid #dcdcdc;
+        border-radius: 10px;
+        background-color: #000;
+        box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.1);
     }
 
     .chat-messages {
