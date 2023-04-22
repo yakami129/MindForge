@@ -210,7 +210,9 @@
 
     let messageInput = "";
     let messages = [];
-ç
+
+    let taskList = [];
+
     function sendMessage() {
         if (messageInput.trim()) {
 
@@ -219,30 +221,90 @@
 
             messageInput = "";
 
-            messages = [...messages, {text: '正在需求分析，请稍等', timestamp: new Date(), isUser: false}];
 
-            messages = [...messages, {text: '正在为您构建应用，请稍等', timestamp: new Date(), isUser: false}];
-
-            messages = [...messages, {text: '正在部署测试环境，请稍等', timestamp: new Date(), isUser: false}];
-
-            messages = [...messages, {
-                text: '应用构建完毕，访问地址：<a href="http://localhost:10000/app_dev_3f5f2a0c100b45d3af9f142bfa1f7972#/" target="_blank">IT Asset Management Software</a>',
-                timestamp: new Date(),
-                isUser: false
-            }];
-
-            // chat(inputText)
-            //     .then(response => {
+            // messages = [...messages, {text: '正在为您构建应用，请稍等', timestamp: new Date(), isUser: false}];
             //
-            //     })
-            //     .catch(error => {
-            //         console.error(error);
-            //     });
+            // messages = [...messages, {text: '正在部署测试环境，请稍等', timestamp: new Date(), isUser: false}];
+            //
+            // messages = [...messages, {
+            //     text: '应用构建完毕，访问地址：<a href="http://localhost:10000/app_dev_3f5f2a0c100b45d3af9f142bfa1f7972#/" target="_blank">IT Asset Management Software</a>',
+            //     timestamp: new Date(),
+            //     isUser: false
+            // }];
+
+            messages = [...messages, {text: '正在需求分析，请稍等...', timestamp: new Date(), isUser: false}];
+
+            startGoalChat(inputText)
+                .then(response => {
+                    messages = [...messages, {text: '需求分析已完成，正在为您创建任务...', timestamp: new Date(), isUser: false}];
+
+                    let newSchemaTaskList = response.schema.map((schemaItem) => {
+                        return {
+                            title: schemaItem.taskName,
+                            tasks: [
+                                {name: schemaItem.taskGoal, type: 'schema'}
+                            ]
+                        }
+                    });
+                    taskList = taskList.concat(newSchemaTaskList);
+                    messages = [...messages, {text: '创建数据结构设计任务已完成', timestamp: new Date(), isUser: false}];
+
+                    let newViewTaskList = response.view.map((schemaItem) => {
+                        return {
+                            title: schemaItem.taskName,
+                            tasks: [
+                                {name: schemaItem.taskGoal, type: 'view'}
+                            ]
+                        }
+                    });
+                    taskList = taskList.concat(newViewTaskList);
+                    messages = [...messages, {text: '创建页面设计任务已完成', timestamp: new Date(), isUser: false}];
+
+                    messages = [...messages, {
+                        text: 'MindForge AI 开始自动执行任务，请稍等片刻...',
+                        timestamp: new Date(),
+                        isUser: false
+                    }];
+
+
+                    let newTaskList = Object.assign([], taskList);
+                    for (let i = 0; i < newTaskList.length; i++) {
+                        let taskItem = newTaskList[i];
+                        let title = taskItem.title;
+                        messages = [...messages, {
+                            text: title + '执行完毕，继续下一个任务',
+                            timestamp: new Date(),
+                            isUser: false
+                        }];
+                        taskList = taskList.filter(task => task.title !== title);
+                    }
+
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
     }
 
-    function chat(prompt) {
-        return fetch(`http://localhost:8000/app/?prompt=${prompt}`)
+    function startGoalChat(prompt) {
+        return fetch(`http://localhost:8000/app/startGoalChat?prompt=${prompt}`)
+            .then(res => res.json())
+            .then(data => data.response);
+    }
+
+    function executeSchemaTaskChat(goal, taskName, taskGoal, taskHought) {
+        return fetch('http://127.0.0.1:8000/app/executeSchemaTaskChat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                goal: goal,
+                taskName: taskName,
+                taskGoal: taskGoal,
+                taskHought: taskHought
+            })
+        })
             .then(res => res.json())
             .then(data => data.response);
     }
@@ -252,6 +314,7 @@
             sendMessage();
         }
     }
+
 
 </script>
 
@@ -289,27 +352,53 @@
             {#if enrichedApps.length}
                 <Layout noPadding gap="L">
 
-                    <div class="chat-container">
+                    <div class="chat-container-with-task-list">
 
-                        <div class="chat-messages">
-                            {#each messages as message (message.timestamp)}
-                                <div class="message {message.isUser ? 'message-right' : 'message-left'}">
-                                    <div class="message-content {message.isUser ? 'user' : 'other'}">
-                                        <span>{@html message.text}</span>
+                        <div class="chat-container">
+
+                            <div class="chat-messages">
+                                {#each messages as message (message.timestamp)}
+                                    <div class="message {message.isUser ? 'message-right' : 'message-left'}">
+                                        <div class="message-content {message.isUser ? 'user' : 'other'}">
+                                            <span>{@html message.text}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            {/each}
+                                {/each}
+                            </div>
+
+                            <div class="chat-input">
+                                <input
+                                        type="text"
+                                        bind:value="{messageInput}"
+                                        placeholder="请简短描述一下你的需求~"
+                                        on:keydown="{handleKeyDown}"
+                                />
+                                <button on:click="{sendMessage}">Send</button>
+                            </div>
+
                         </div>
 
-                        <div class="chat-input">
-                            <input
-                                    type="text"
-                                    bind:value="{messageInput}"
-                                    placeholder="请简短描述一下你的需求~"
-                                    on:keydown="{handleKeyDown}"
-                            />
-                            <button on:click="{sendMessage}">Send</button>
+                        <div class="task-list-container">
+                            <div class="task-list-header">
+                                <i class="icon-task-list fa fa-list-alt"></i>
+                                <h3>当前任务列表</h3>
+                            </div>
+                            <div class="task-item-container">
+                                {#each taskList as task}
+                                    <div class="task-list">
+                                        <h2>{task.title}</h2>
+                                        <ul>
+                                            {#each task.tasks as item, i}
+                                                <li>
+                                                    <span class="task-name">目标：{item.name}</span>
+                                                </li>
+                                            {/each}
+                                        </ul>
+                                    </div>
+                                {/each}
+                            </div>
                         </div>
+
                     </div>
 
                 </Layout>
@@ -438,17 +527,6 @@
         font-family: Arial, sans-serif;
     }
 
-    .chat-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 60vh;
-        padding: 1rem;
-        border: 1px solid #dcdcdc;
-        border-radius: 10px;
-        background-color: #000;
-        box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.1);
-    }
 
     .chat-messages {
         flex-grow: 1;
@@ -502,6 +580,87 @@
 
     .message-content.other {
         background-color: #444;
+    }
+
+    .chat-container-with-task-list {
+        display: flex;
+
+    }
+
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 60vh;
+        width: 70%;
+        padding: 1rem;
+        border: 1px solid #dcdcdc;
+        border-radius: 10px;
+        box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.1);
+        margin-right: 10px;
+        background-color: #000;
+    }
+
+    .task-list-container {
+        width: 30%;
+        border: 1px solid #dcdcdc;
+        border-radius: 10px;
+        background-color: #000;
+        margin-right: 10px;
+        background-color: #000;
+    }
+
+    .task-item-container {
+        max-height: 60vh; /* 设置最大高度 */
+        height: 60vh; /* 设置固定高度 */
+        overflow-y: auto; /* 允许出现纵向滚动条 */
+    }
+
+    .task-list-header {
+        display: flex;
+        height: 20px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 5px;
+    }
+
+    .icon-task-list {
+        font-size: 1rem;
+        margin-right: 10px;
+    }
+
+    .task-list {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 10px;
+        background-color: #222;
+    }
+
+    .task-list h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .task-list ul {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    .task-list li {
+        margin-bottom: 5px;
+        font-size: 1rem;
+        color: #fff;
+    }
+
+    .task-list li .task-name {
+        font-weight: bold;
+    }
+
+    .task-list li .task-desc {
+        margin-left: 10px;
     }
 
 </style>
