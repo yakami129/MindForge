@@ -236,7 +236,12 @@
 
             startGoalChat(inputText)
                 .then(response => {
-                    messages = [...messages, {text: '需求分析已完成，正在为您创建任务...', timestamp: new Date(), isUser: false}];
+
+                    messages = [...messages, {text: '需求分析已完成', timestamp: new Date(), isUser: false}];
+
+                    messages = [...messages, {text: '正在为您创建应用，请稍等片刻...', timestamp: new Date(), isUser: false}];
+
+                    messages = [...messages, {text: '正在为您创建任务，请稍等片刻...', timestamp: new Date(), isUser: false}];
 
                     let newSchemaTaskList = response.schema.map((schemaItem) => {
                         return {
