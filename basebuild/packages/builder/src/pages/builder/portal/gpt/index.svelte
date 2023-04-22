@@ -210,19 +210,34 @@
 
     let messageInput = "";
     let messages = [];
-
+ç
     function sendMessage() {
         if (messageInput.trim()) {
+
             messages = [...messages, {text: messageInput.trim(), timestamp: new Date(), isUser: true}];
             let inputText = messageInput;
+
             messageInput = "";
-            chat(inputText)
-                .then(response => {
-                    messages = [...messages, {text: response, timestamp: new Date(), isUser: false}];
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+
+            messages = [...messages, {text: '正在需求分析，请稍等', timestamp: new Date(), isUser: false}];
+
+            messages = [...messages, {text: '正在为您构建应用，请稍等', timestamp: new Date(), isUser: false}];
+
+            messages = [...messages, {text: '正在部署测试环境，请稍等', timestamp: new Date(), isUser: false}];
+
+            messages = [...messages, {
+                text: '应用构建完毕，访问地址：<a href="http://localhost:10000/app_dev_3f5f2a0c100b45d3af9f142bfa1f7972#/" target="_blank">IT Asset Management Software</a>',
+                timestamp: new Date(),
+                isUser: false
+            }];
+
+            // chat(inputText)
+            //     .then(response => {
+            //
+            //     })
+            //     .catch(error => {
+            //         console.error(error);
+            //     });
         }
     }
 
@@ -231,8 +246,6 @@
             .then(res => res.json())
             .then(data => data.response);
     }
-
-    chat('hello')
 
     function handleKeyDown(e) {
         if (e.key === "Enter") {
@@ -267,7 +280,7 @@
                     <Layout noPadding gap="XS">
                         <Heading size="L">MindForge</Heading>
                         <Body size="M">
-                            MindForge是一种智能技术，它可以帮助人们更快地构建自己的业务系统。它通过融合机器学习、自然语言处理和智能分析，提供了一种更高效的需求分析方式，可以更好的理解人们的业务需求。MindForge的核心理念是帮助人们更快地构建业务系统，更快地实现他们的目标。
+                        MindForge是一种智能技术，它可以帮助人们更快地构建自己的业务系统。它通过融合机器学习、自然语言处理和智能分析，提供了一种更高效的需求分析方式，可以更好的理解人们的业务需求。MindForge的核心理念是帮助人们更快地构建业务系统，更快地实现他们的目标。
                         </Body>
                     </Layout>
                 </div>
@@ -282,7 +295,7 @@
                             {#each messages as message (message.timestamp)}
                                 <div class="message {message.isUser ? 'message-right' : 'message-left'}">
                                     <div class="message-content {message.isUser ? 'user' : 'other'}">
-                                        <span>{message.text}</span>
+                                        <span>{@html message.text}</span>
                                     </div>
                                 </div>
                             {/each}
@@ -490,6 +503,5 @@
     .message-content.other {
         background-color: #444;
     }
-
 
 </style>

@@ -1,6 +1,8 @@
-from django.urls import re_path
-from .views import ChatGPTView
+from django.urls import path
+
+from . import views
 
 urlpatterns = [
-    re_path(r'^', ChatGPTView.as_view()),
+    path('startGoalChat', views.start_goal_chat, name='startGoalChat'),
+    path('executeSchemaTaskChat', views.execute_schema_task_chat, name='executeSchemaTaskChat'),
 ]
