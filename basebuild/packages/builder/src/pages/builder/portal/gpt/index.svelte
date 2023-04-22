@@ -237,6 +237,9 @@
             startGoalChat(inputText)
                 .then(response => {
 
+                    // 用户提出的目标
+                    let goal = response.query
+
                     messages = [...messages, {text: '需求分析已完成', timestamp: new Date(), isUser: false}];
 
                     messages = [...messages, {text: '正在为您创建应用，请稍等片刻...', timestamp: new Date(), isUser: false}];
@@ -245,25 +248,23 @@
 
                     let newSchemaTaskList = response.schema.map((schemaItem) => {
                         return {
-                            title: schemaItem.taskName,
-                            tasks: [
-                                {name: schemaItem.taskGoal, type: 'schema'}
-                            ]
+                            taskName: schemaItem.taskName,
+                            taskGoal: schemaItem.taskGoal,
+                            taskHought: schemaItem.taskHought,
+                            type: 'schema'
                         }
                     });
                     taskList = taskList.concat(newSchemaTaskList);
-                    messages = [...messages, {text: '创建数据结构设计任务已完成', timestamp: new Date(), isUser: false}];
 
                     let newViewTaskList = response.view.map((schemaItem) => {
                         return {
-                            title: schemaItem.taskName,
-                            tasks: [
-                                {name: schemaItem.taskGoal, type: 'view'}
-                            ]
+                            taskName: schemaItem.taskName,
+                            taskGoal: schemaItem.taskGoal,
+                            taskHought: schemaItem.taskHought,
+                            type: 'view'
                         }
                     });
                     taskList = taskList.concat(newViewTaskList);
-                    messages = [...messages, {text: '创建页面设计任务已完成', timestamp: new Date(), isUser: false}];
 
                     messages = [...messages, {
                         text: 'MindForge AI 开始自动执行任务，请稍等片刻...',
@@ -275,13 +276,28 @@
                     let newTaskList = Object.assign([], taskList);
                     for (let i = 0; i < newTaskList.length; i++) {
                         let taskItem = newTaskList[i];
-                        let title = taskItem.title;
-                        messages = [...messages, {
-                            text: title + '执行完毕，继续下一个任务',
-                            timestamp: new Date(),
-                            isUser: false
-                        }];
-                        taskList = taskList.filter(task => task.title !== title);
+                        let taskName = taskItem.taskName;
+                        let taskGoal = taskItem.taskGoal;
+                        let taskHought = taskItem.taskHought;
+                        let type = taskItem.type;
+                        // if (type === 'schema') {
+
+                        executeSchemaTaskChat(goal, taskName, taskGoal, taskHought)
+                            .then(response => {
+                                messages = [...messages, {
+                                    text: taskName + '执行完毕，继续下一个任务',
+                                    timestamp: new Date(),
+                                    isUser: false
+                                }];
+                                taskList = taskList.filter(task => task.taskName !== taskName);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+
+                        // } else if (type === 'view') {
+                        //
+                        // }
                     }
 
                 })
@@ -391,13 +407,11 @@
                             <div class="task-item-container">
                                 {#each taskList as task}
                                     <div class="task-list">
-                                        <h2>{task.title}</h2>
+                                        <h2>{task.taskName}</h2>
                                         <ul>
-                                            {#each task.tasks as item, i}
-                                                <li>
-                                                    <span class="task-name">目标：{item.name}</span>
-                                                </li>
-                                            {/each}
+                                            <li>
+                                                <span class="task-name">目标：{task.taskGoal}</span>
+                                            </li>
                                         </ul>
                                     </div>
                                 {/each}
