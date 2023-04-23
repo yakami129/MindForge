@@ -250,7 +250,7 @@
                         return {
                             taskName: schemaItem.taskName,
                             taskGoal: schemaItem.taskGoal,
-                            taskHought: schemaItem.taskHought,
+                            taskThought: schemaItem.taskThought,
                             type: 'schema'
                         }
                     });
@@ -260,7 +260,7 @@
                         return {
                             taskName: schemaItem.taskName,
                             taskGoal: schemaItem.taskGoal,
-                            taskHought: schemaItem.taskHought,
+                            taskThought: schemaItem.taskThought,
                             type: 'view'
                         }
                     });
@@ -278,26 +278,45 @@
                         let taskItem = newTaskList[i];
                         let taskName = taskItem.taskName;
                         let taskGoal = taskItem.taskGoal;
-                        let taskHought = taskItem.taskHought;
+                        let taskThought = taskItem.taskThought;
                         let type = taskItem.type;
-                        // if (type === 'schema') {
 
-                        executeSchemaTaskChat(goal, taskName, taskGoal, taskHought)
-                            .then(response => {
-                                messages = [...messages, {
-                                    text: taskName + '执行完毕，继续下一个任务',
-                                    timestamp: new Date(),
-                                    isUser: false
-                                }];
-                                taskList = taskList.filter(task => task.taskName !== taskName);
-                            })
-                            .catch(error => {
-                                console.error(error);
-                            });
+                        if (type === 'schema') {
 
-                        // } else if (type === 'view') {
-                        //
-                        // }
+                            executeSchemaTaskChat(goal, taskName, taskGoal, taskThought)
+                                .then(response => {
+
+                                    // TODO 调用创建数据表接口
+
+                                    messages = [...messages, {
+                                        text: taskName + '执行完毕，继续下一个任务',
+                                        timestamp: new Date(),
+                                        isUser: false
+                                    }];
+                                    taskList = taskList.filter(task => task.taskName !== taskName);
+                                })
+                                .catch(error => {
+                                    console.error(error);
+                                });
+
+                        } else if (type === 'view') {
+
+                             // TODO 调用创建页面接口
+
+                            console.log("todo view")
+                            executeSchemaTaskChat(goal, taskName, taskGoal, taskThought)
+                                .then(response => {
+                                    messages = [...messages, {
+                                        text: taskName + '执行完毕，继续下一个任务',
+                                        timestamp: new Date(),
+                                        isUser: false
+                                    }];
+                                    taskList = taskList.filter(task => task.taskName !== taskName);
+                                })
+                                .catch(error => {
+                                    console.error(error);
+                                });
+                        }
                     }
 
                 })
@@ -313,7 +332,7 @@
             .then(data => data.response);
     }
 
-    function executeSchemaTaskChat(goal, taskName, taskGoal, taskHought) {
+    function executeSchemaTaskChat(goal, taskName, taskGoal, taskThought) {
         return fetch('http://127.0.0.1:8000/app/executeSchemaTaskChat', {
             method: 'POST',
             headers: {
@@ -323,7 +342,7 @@
                 goal: goal,
                 taskName: taskName,
                 taskGoal: taskGoal,
-                taskHought: taskHought
+                taskThought: taskThought
             })
         })
             .then(res => res.json())
