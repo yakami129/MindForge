@@ -58,6 +58,7 @@ class ChatGPT(APIView):
                                                                       task_thought=task_thought)
         result = ChatGPT.chat(self=self, prompt=schema_task_prompt)
         result = ChatGPT.format_result(result)
+        print("[BIZ] task_chat:" + result)
         result_object = json.loads(result)
         return result_object
 
@@ -72,12 +73,12 @@ class ChatGPTPrompt:
 
     def start_goal_prompt(self, goal):
         query_prompt_str = "你现在是一个名为 MindForgGPT 的自主任务创建 AI。 您有以下目标 `{0}`。请按照数据结构设计，页面设计去分类, 每个分类可以创建一个包含 0 到 3 个任务的列表，你无需完成它，只输出任务名称，任务目标和实现思路，以便更接近或完全达到您的目标你的输出格式"
-        out_put_prompt_str = "$START{\"query\":\"我提出的目标\",\"appName\":\"根据我提出的目标生成appName\",\"schema\":[{\"taskName\":\"你生成的数据结构设计任务名称\",\"taskGoal\":\"你生成的数据结构设计任务目标\",\"taskThought\":\"你生成的数据结构设计任务思路\"}],\"view\":[{\"taskName\":\"你生成的页面设计任务名称\",\"taskGoal\":\"你生成的页面设计任务目标\",\"taskThought\":\"你生成的页面设计任务思路\"}]}$END"
+        out_put_prompt_str = "$START{\"query\":\"我提出的目标\",\"appName\":\"根据我提出的目标生成appName，用英文\",\"schema\":[{\"taskName\":\"你生成的数据结构设计任务名称\",\"taskGoal\":\"你生成的数据结构设计任务目标\",\"taskThought\":\"你生成的数据结构设计任务思路\"}],\"view\":[{\"taskName\":\"你生成的页面设计任务名称\",\"taskGoal\":\"你生成的页面设计任务目标\",\"taskThought\":\"你生成的页面设计任务思路\"}]}$END"
         start_goal_prompt_str = query_prompt_str.format(goal) + out_put_prompt_str
         return start_goal_prompt_str
 
     def execute_schema_task_prompt(self, goal, task_name, task_goal, task_thought):
         query_prompt_str = "你现在是一个名为 MindForgSchemaGPT 的数据结构设计 AI。 您有以下目标 `{0}`,您的任务为`{1}`，目标为`{2}`,思路为`{3}`,如果有多个数据实体，请输出多个数据实体,如果是多个数据实体，请在当前输出数组中累加新的元素，请严格按照输出格式输出内容，输出格式如下"
-        out_put_prompt_str = "$START[{\"schema\":\"你生成的数据实体名称用英语\",\"columns\":[{\"name\":\"你生成的字段名称用英语\",\"type\":\"你生成的字段类型（使用mysql的数据类型）\",\"description\":\"你生成的字段描述\"}]}如果有多个数据实体，请在此处添加新的数据实体]$END"
+        out_put_prompt_str = "$START[{\"schema\":\"你生成的数据实体名称用英语\",\"columns\":[{\"name\":\"你生成的字段名称用英语\",\"type\":\"你生成的字段类型（使用mysql的数据类型）\",\"description\":\"你生成的字段描述\"}]}如果有多个数据实体，请在此处添加新的数据实体并用`,`分开]$END"
         start_goal_prompt_str = query_prompt_str.format(goal, task_name, task_goal, task_thought) + out_put_prompt_str
         return start_goal_prompt_str
