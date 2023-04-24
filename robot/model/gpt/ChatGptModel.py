@@ -6,8 +6,13 @@ from dotenv import load_dotenv
 import os
 import openai
 import json
+import threading
+import logging
 
 load_dotenv()  # 读取 .env 文件
+
+# 创建一个全局锁
+lock = threading.Lock()
 
 
 class ChatGPT(APIView):
@@ -25,18 +30,20 @@ class ChatGPT(APIView):
         #     n=1,
         #     stop=None
         # )
-
-        time.sleep(30)  # 线程休眠20秒
-
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
-
-        text = completion.choices[0].message.content
-        return text
+        lock.acquire()
+        try:
+            completion = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": prompt}
+                ]
+            )
+            time.sleep(10)  # 线程休眠5秒
+            return completion.choices[0].message.content
+        except Exception as e:
+            logging.error(f"业务代码执行出错：{str(e)}")
+        finally:
+            lock.release()
 
     def start_goal_chat(self, prompt):
         start_goal_prompt = ChatGPTPrompt.start_goal_prompt(self=self, goal=prompt)

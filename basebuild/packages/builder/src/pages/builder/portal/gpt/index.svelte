@@ -239,12 +239,13 @@
 
                     // 用户提出的目标
                     let goal = response.query
+                    // 生成的应用名称
+                    let appName = response.appName;
+                    // 生成的应用id
+                    let appId = ""
 
                     messages = [...messages, {text: '需求分析已完成', timestamp: new Date(), isUser: false}];
 
-                    messages = [...messages, {text: '正在为您创建应用，请稍等片刻...', timestamp: new Date(), isUser: false}];
-
-                    messages = [...messages, {text: '正在为您创建任务，请稍等片刻...', timestamp: new Date(), isUser: false}];
 
                     let newSchemaTaskList = response.schema.map((schemaItem) => {
                         return {
@@ -266,6 +267,8 @@
                     });
                     taskList = taskList.concat(newViewTaskList);
 
+                    messages = [...messages, {text: '创建任务成功', timestamp: new Date(), isUser: false}];
+
                     messages = [...messages, {
                         text: 'MindForge AI 开始自动执行任务，请稍等片刻...',
                         timestamp: new Date(),
@@ -273,61 +276,83 @@
                     }];
 
 
-                    let newTaskList = Object.assign([], taskList);
-                    for (let i = 0; i < newTaskList.length; i++) {
-                        let taskItem = newTaskList[i];
-                        let taskName = taskItem.taskName;
-                        let taskGoal = taskItem.taskGoal;
-                        let taskThought = taskItem.taskThought;
-                        let type = taskItem.type;
+                    createApplication(appName)
+                        .then(response => {
 
-                        if (type === 'schema') {
+                            appId = response.data._id;
+                            let newTaskList = Object.assign([], taskList);
+                            for (let i = 0; i < newTaskList.length; i++) {
+                                let taskItem = newTaskList[i];
+                                let taskName = taskItem.taskName;
+                                let taskGoal = taskItem.taskGoal;
+                                let taskThought = taskItem.taskThought;
+                                let type = taskItem.type;
 
-                            executeSchemaTaskChat(goal, taskName, taskGoal, taskThought)
-                                .then(response => {
+                                if (type === 'schema') {
 
-                                    // TODO 调用创建数据表接口
+                                    executeSchemaTaskChat(goal, taskName, taskGoal, taskThought)
+                                        .then(response => {
+                                            createTable(appId, response).then(createResponse => {
+                                                messages = [...messages, {
+                                                    text: taskName + '执行完毕，继续下一个任务',
+                                                    timestamp: new Date(),
+                                                    isUser: false
+                                                }];
+                                                taskList = taskList.filter(task => task.taskName !== taskName);
+                                            })
+                                        })
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
+                                } else if (type === 'view') {
+                                    // TODO 调用创建页面接口
+                                    console.log("todo view")
+                                  /*  executeSchemaTaskChat(goal, taskName, taskGoal, taskThought)
+                                        .then(response => {
+                                            messages = [...messages, {
+                                                text: taskName + '执行完毕，继续下一个任务',
+                                                timestamp: new Date(),
+                                                isUser: false
+                                            }];
+                                            taskList = taskList.filter(task => task.taskName !== taskName);
+                                        })
+                                        .catch(error => {
+                                            console.error(error);
+                                        });*/
+                                }
+                            }
 
-                                    messages = [...messages, {
-                                        text: taskName + '执行完毕，继续下一个任务',
-                                        timestamp: new Date(),
-                                        isUser: false
-                                    }];
-                                    taskList = taskList.filter(task => task.taskName !== taskName);
-                                })
-                                .catch(error => {
-                                    console.error(error);
-                                });
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
 
-                        } else if (type === 'view') {
-
-                             // TODO 调用创建页面接口
-
-                            console.log("todo view")
-                            executeSchemaTaskChat(goal, taskName, taskGoal, taskThought)
-                                .then(response => {
-                                    messages = [...messages, {
-                                        text: taskName + '执行完毕，继续下一个任务',
-                                        timestamp: new Date(),
-                                        isUser: false
-                                    }];
-                                    taskList = taskList.filter(task => task.taskName !== taskName);
-                                })
-                                .catch(error => {
-                                    console.error(error);
-                                });
-                        }
-                    }
-
+                    let devAppUrl = generateDevAppUrl(appName, appId);
+                    messages = [...messages, {
+                        text: '创建应用已完成，测试环境访问地址：' + devAppUrl,
+                        timestamp: new Date(),
+                        isUser: false
+                    }];
                 })
-                .catch(error => {
-                    console.error(error);
-                });
         }
     }
 
     function startGoalChat(prompt) {
         return fetch(`http://localhost:8000/app/startGoalChat?prompt=${prompt}`)
+            .then(res => res.json())
+            .then(data => data.response);
+    }
+
+    function createApplication(appName) {
+        return fetch('http://127.0.0.1:8000/app/budibase/createApplication', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                appName: appName
+            })
+        })
             .then(res => res.json())
             .then(data => data.response);
     }
@@ -347,6 +372,26 @@
         })
             .then(res => res.json())
             .then(data => data.response);
+    }
+
+    function createTable(appId, schemas) {
+        return fetch('http://127.0.0.1:8000/app/budibase/createTable', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                appId: appId,
+                schemas: schemas
+            })
+        })
+            .then(res => res.json())
+            .then(data => data.response);
+    }
+
+    function generateDevAppUrl(appName, appId) {
+        let appUrl = "/" + appId
+        return '<a class="app-link" href="' + appUrl + '">' + appName + '</a>'
     }
 
     function handleKeyDown(e) {
@@ -699,6 +744,10 @@
 
     .task-list li .task-desc {
         margin-left: 10px;
+    }
+
+    .app-link {
+        color: blue;
     }
 
 </style>
